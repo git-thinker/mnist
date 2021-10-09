@@ -56,6 +56,7 @@ class FunctionLayer(Layer):
     
     def backward(self, d: np.ndarray) -> np.ndarray:
         if self.function.jacobin:
+            # note: jacobin matrix demands input as flatten vector
             shape = d.shape
             d = d.reshape((1, -1))
             return np.dot(d, self.function.derivate(self.z).T).reshape(shape)
@@ -93,9 +94,10 @@ class FullyConnected(Layer):
     dl/db = d
     """
 
-    def __init__(self, in_size, out_size):
+    def __init__(self, in_size:int, out_size:int):
         self.in_size = in_size
         self.out_size = out_size
+        # xavier initialisation
         self.w:np.ndarray = np.random.normal(loc=0.0, scale=1.0, size=(self.in_size, self.out_size))
         self.b:np.ndarray = np.random.normal(loc=0.0, scale=1.0, size=(1, self.out_size))
         self.x:np.ndarray = None
@@ -117,12 +119,16 @@ class FullyConnected(Layer):
         self.b -= lr * self.db
 
 class Conv2d(Layer):
+    # https://zhuanlan.zhihu.com/p/81675803
+    # https://www.bilibili.com/video/BV1Af4y187fi
+    # bias not functioning 
     """
     input_data(samples, channels, height, width)
     output_data(samples, kernal_num, x, y)
     """
 
     def __init__(self, in_shape, kernal_size, kernal_num, stride=1, padding='valid'):
+        # bias not activated
         if padding == 'valid':
             padding = 0
         elif padding == 'same':
@@ -137,6 +143,7 @@ class Conv2d(Layer):
         self.stride:int = stride
         self.padding:int = padding
         self.kernal_shape:tuple = (self.kernal_num, self.in_shape[0], self.kernal_size, self.kernal_size)
+        # xavier initialisation
         self.kernal:np.ndarray = np.random.normal(loc=0.0, scale=1.0, size=self.kernal_shape)
         self.bias:np.ndarray = np.random.normal(loc=0.0, scale=1.0, size=(1,))
         self.x:np.ndarray = None

@@ -46,8 +46,8 @@ class leakyrelu(PlainFunction):
 
 
 class softmax(PlainFunction):
-    # TODO : Something went wrong
-    # error with backwrad shape?
+    # https://zhuanlan.zhihu.com/p/37740860
+
     def __init__(self):
         super(softmax, self).__init__(True)
 
@@ -61,7 +61,6 @@ class softmax(PlainFunction):
         da/dz = aE - a.T*a
         """
         a = self.forward(z)
-        b = np.diag(a.reshape((-1,))) - np.dot(a.reshape((-1, 1)), a.reshape((1, -1)))
         return np.diag(a.reshape((-1,))) - np.dot(a.reshape((-1, 1)), a.reshape((1, -1)))
 
 class SumSquardError(object):
@@ -72,6 +71,7 @@ class SumSquardError(object):
         return (y_ - y)
 
 class CrossEntropyLoss(object):
+    # https://zhuanlan.zhihu.com/p/99923080
     def forward(self, y_:np.ndarray, y:np.ndarray)->np.ndarray:
         # (sample, one_hot)
         return - (np.log(y_) * y).sum(axis=1)
