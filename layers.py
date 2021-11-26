@@ -98,6 +98,7 @@ class FullyConnected(Layer):
         self.in_size = in_size
         self.out_size = out_size
         # xavier initialisation
+        # self.w:np.ndarray = np.random.normal(loc=0.0, scale=1.0, size=(self.in_size, self.out_size)) / np.sqrt(self.in_size)
         self.w:np.ndarray = np.random.normal(loc=0.0, scale=1.0, size=(self.in_size, self.out_size))
         self.b:np.ndarray = np.random.normal(loc=0.0, scale=1.0, size=(1, self.out_size))
         self.x:np.ndarray = None
@@ -144,6 +145,7 @@ class Conv2d(Layer):
         self.padding:int = padding
         self.kernal_shape:tuple = (self.kernal_num, self.in_shape[0], self.kernal_size, self.kernal_size)
         # xavier initialisation
+        # self.kernal:np.ndarray = np.random.normal(loc=0.0, scale=1.0, size=self.kernal_shape) / np.sqrt(self.in_shape[0] * self.kernal_size**2)
         self.kernal:np.ndarray = np.random.normal(loc=0.0, scale=1.0, size=self.kernal_shape)
         self.bias:np.ndarray = np.random.normal(loc=0.0, scale=1.0, size=(1,))
         self.x:np.ndarray = None
